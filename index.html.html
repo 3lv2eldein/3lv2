@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohamed Alaa — N8N Automation Expert</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --accent: #00ff88;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --text: #f0f0f5;
+    --muted: #6b7280;
+    --border: #1f1f2e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+
+  /* LANG TOGGLE */
+  .lang-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .lang-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+  .lang-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .lang-btn:first-child { border-radius: 4px 0 0 4px; }
+  .lang-btn:last-child { border-radius: 0 4px 4px 0; border-left: none; }
+
+  /* HERO */
+  .hero {
+    padding: 100px 0 80px;
+    position: relative;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(0,255,136,0.3);
+    padding: 6px 14px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-name {
+    font-size: clamp(52px, 8vw, 90px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 8px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero-name span { color: var(--accent); }
+
+  .hero-title {
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 400;
+    color: var(--muted);
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s 0.2s ease both;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .hero-title .highlight {
+    color: var(--accent3);
+    font-weight: 500;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    line-height: 1.7;
+    color: #9ca3af;
+    font-size: 16px;
+    animation: fadeUp 0.6s 0.3s ease both;
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+  }
+
+  .hero-desc-ar {
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 56px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .stat-item {}
+  .stat-num {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  .glow-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+  }
+
+  /* SECTION */
+  .section { padding: 80px 0; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 48px;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .project-card:hover {
+    border-color: rgba(0,255,136,0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .project-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .project-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .project-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .project-desc-ar {
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    background: rgba(0,255,136,0.08);
+    color: var(--accent);
+    border: 1px solid rgba(0,255,136,0.15);
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .skill-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.2s;
+  }
+
+  .skill-item:hover {
+    border-color: rgba(124,58,237,0.4);
+    background: rgba(124,58,237,0.05);
+  }
+
+  .skill-icon { font-size: 20px; }
+  .skill-name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* CONTACT */
+  .contact-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-section::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at center, rgba(0,255,136,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .contact-title {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+
+  .contact-sub {
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+
+  .contact-link.primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .contact-link.primary:hover {
+    background: #00cc6e;
+    transform: translateY(-2px);
+  }
+
+  .contact-link.secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .contact-link.secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 0;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* AR overrides */
+  body.ar { direction: rtl; }
+  body.ar .hero-stats { flex-direction: row-reverse; }
+  body.ar .hero-tag { letter-spacing: 1px; }
+  body.ar .section-label { letter-spacing: 1px; }
+  body.ar .project-num { text-align: right; }
+  body.ar .project-tags { flex-direction: row-reverse; }
+  body.ar .contact-links { flex-direction: row-reverse; }
+  body.ar .hero-name { letter-spacing: -1px; }
+
+  .en-content { display: block; }
+  .ar-content { display: none; }
+  body.ar .en-content { display: none; }
+  body.ar .ar-content { display: block; }
+  body.ar .hero-title { font-family: 'Cairo', sans-serif; }
+  body.ar .section-title { font-family: 'Cairo', sans-serif; }
+  body.ar .project-title { font-family: 'Cairo', sans-serif; }
+  body.ar .contact-title { font-family: 'Cairo', sans-serif; }
+  body.ar .contact-sub { font-family: 'Cairo', sans-serif; }
+  body.ar .stat-label { font-family: 'Cairo', sans-serif; letter-spacing: 0; }
+  body.ar .contact-link { font-family: 'Cairo', sans-serif; }
+  body.ar .tag { font-family: 'Cairo', sans-serif; letter-spacing: 0; }
+  body.ar .skill-name { font-family: 'Cairo', sans-serif; }
+  body.ar .project-tags { justify-content: flex-end; }
+</style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" onclick="setLang('ar')">عربي</button>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">
+      <span class="glow-dot"></span>
+      <span class="en-content">Available for work</span>
+      <span class="ar-content">متاح للعمل</span>
+    </div>
+    <h1 class="hero-name">Mohamed <span>Alaa</span></h1>
+    <p class="hero-title">
+      <span class="en-content">N8N <span class="highlight">Automation</span> Engineer</span>
+      <span class="ar-content">مهندس أتمتة <span class="highlight">N8N</span></span>
+    </p>
+    <p class="hero-desc en-content">
+      I build smart automated workflows that save businesses 10+ hours per week — from AI chatbots to full business automation systems.
+    </p>
+    <p class="hero-desc ar-content hero-desc-ar">
+      أبني أنظمة أتمتة ذكية توفر على الشركات أكثر من 10 ساعات أسبوعياً — من chatbots بالذكاء الاصطناعي إلى أنظمة أتمتة كاملة.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">4+</div>
+        <div class="stat-label en-content">Projects Built</div>
+        <div class="stat-label ar-content">مشاريع منجزة</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">10+</div>
+        <div class="stat-label en-content">Hours Saved / Week</div>
+        <div class="stat-label ar-content">ساعة موفرة / أسبوع</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">∞</div>
+        <div class="stat-label en-content">Automations Possible</div>
+        <div class="stat-label ar-content">أتمتة ممكنة</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROJECTS -->
+  <section class="section">
+    <p class="section-label en-content">// Projects</p>
+    <p class="section-label ar-content">// المشاريع</p>
+    <h2 class="section-title">
+      <span class="en-content">What I've Built</span>
+      <span class="ar-content">ما بنيته</span>
+    </h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-num">01</div>
+        <span class="project-icon">🤖</span>
+        <h3 class="project-title en-content">AI Telegram Chatbot</h3>
+        <h3 class="project-title ar-content">بوت تليجرام بالذكاء الاصطناعي</h3>
+        <p class="project-desc en-content">A fully automated Telegram bot powered by AI that responds to user questions instantly, 24/7 — no human intervention needed.</p>
+        <p class="project-desc ar-content project-desc-ar">بوت تليجرام مدعوم بالذكاء الاصطناعي يرد على أسئلة المستخدمين تلقائياً على مدار الساعة دون تدخل بشري.</p>
+        <div class="project-tags">
+          <span class="tag">N8N</span>
+          <span class="tag">Telegram API</span>
+          <span class="tag">AI / LLM</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">02</div>
+        <span class="project-icon">📊</span>
+        <h3 class="project-title en-content">Customer Feedback Analyzer</h3>
+        <h3 class="project-title ar-content">محلل آراء العملاء</h3>
+        <p class="project-desc en-content">Collects customer feedback from a form, analyzes sentiment using AI, and sends instant categorized reports via Telegram.</p>
+        <p class="project-desc ar-content project-desc-ar">يجمع آراء العملاء من نموذج، يحللها بالذكاء الاصطناعي، ويرسل تقارير فورية مصنفة عبر تليجرام.</p>
+        <div class="project-tags">
+          <span class="tag">N8N</span>
+          <span class="tag">Google Forms</span>
+          <span class="tag">Sentiment AI</span>
+          <span class="tag">Telegram</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">03</div>
+        <span class="project-icon">📦</span>
+        <h3 class="project-title en-content">Inventory Management Bot</h3>
+        <h3 class="project-title ar-content">نظام إدارة المخزن</h3>
+        <p class="project-desc en-content">Send a product name and quantity via Telegram → automatically updates Google Sheets stock and sends confirmation instantly.</p>
+        <p class="project-desc ar-content project-desc-ar">أرسل اسم المنتج والكمية عبر تليجرام ← يحدث الجرد في Google Sheets تلقائياً ويبعت تأكيد فوري.</p>
+        <div class="project-tags">
+          <span class="tag">N8N</span>
+          <span class="tag">Telegram</span>
+          <span class="tag">Google Sheets</span>
+          <span class="tag">Python</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">04</div>
+        <span class="project-icon">🛒</span>
+        <h3 class="project-title en-content">Orders Automation Bot</h3>
+        <h3 class="project-title ar-content">بوت الطلبات التلقائي</h3>
+        <p class="project-desc en-content">Automates the full order pipeline — from receiving orders via Telegram to logging in Google Sheets and sending confirmations.</p>
+        <p class="project-desc ar-content project-desc-ar">يؤتمت دورة الطلبات كاملة — من استقبال الطلبات عبر تليجرام إلى تسجيلها في Google Sheets وإرسال التأكيدات.</p>
+        <div class="project-tags">
+          <span class="tag">N8N</span>
+          <span class="tag">Telegram</span>
+          <span class="tag">Google Sheets</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SKILLS -->
+  <section class="section">
+    <p class="section-label en-content">// Skills & Tools</p>
+    <p class="section-label ar-content">// المهارات والأدوات</p>
+    <h2 class="section-title">
+      <span class="en-content">My Tech Stack</span>
+      <span class="ar-content">الأدوات التي أستخدمها</span>
+    </h2>
+    <div class="skills-grid">
+      <div class="skill-item"><span class="skill-icon">⚡</span><span class="skill-name">N8N</span></div>
+      <div class="skill-item"><span class="skill-icon">🤖</span><span class="skill-name">AI / LLM APIs</span></div>
+      <div class="skill-item"><span class="skill-icon">✈️</span><span class="skill-name">Telegram Bot API</span></div>
+      <div class="skill-item"><span class="skill-icon">📊</span><span class="skill-name">Google Sheets</span></div>
+      <div class="skill-item"><span class="skill-icon">🐍</span><span class="skill-name">Python</span></div>
+      <div class="skill-item"><span class="skill-icon">🔗</span><span class="skill-name">Webhooks & APIs</span></div>
+      <div class="skill-item"><span class="skill-icon">📋</span><span class="skill-name">Google Forms</span></div>
+      <div class="skill-item"><span class="skill-icon">☁️</span><span class="skill-name">Railway / Cloud</span></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section class="section">
+    <div class="contact-section">
+      <h2 class="contact-title">
+        <span class="en-content">Let's Work Together</span>
+        <span class="ar-content">لنعمل معاً</span>
+      </h2>
+      <p class="contact-sub en-content">Ready to automate your business? Let's talk.</p>
+      <p class="contact-sub ar-content">جاهز تأتمت شغلك؟ تكلم معايا.</p>
+      <div class="contact-links">
+        <a href="https://www.fiverr.com/mohamed_alaas" target="_blank" class="contact-link primary">
+          🛒 <span class="en-content">Hire me on Fiverr</span><span class="ar-content">وظفني على Fiverr</span>
+        </a>
+        <a href="https://t.me/your_telegram" class="contact-link secondary">
+          ✈️ <span class="en-content">Telegram</span><span class="ar-content">تليجرام</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <span class="en-content">© 2025 Mohamed Alaa · Built with N8N & passion</span>
+  <span class="ar-content">© 2025 محمد علاء · مبني بـ N8N وشغف</span>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.classList.toggle('ar', lang === 'ar');
+    document.querySelectorAll('.lang-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', (i === 0 && lang === 'en') || (i === 1 && lang === 'ar'));
+    });
+  }
+</script>
+</body>
+</html>
